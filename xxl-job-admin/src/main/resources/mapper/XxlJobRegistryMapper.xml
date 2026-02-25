@@ -51,13 +51,31 @@
 		WHERE t.UPDATE_TIME &lt; DATEADD(SECOND, -#{timeout} , #{nowTime})
 	</select>
 
-	<insert id="registrySaveOrUpdate" >
+<!--	<insert id="registrySaveOrUpdate" >
 		INSERT INTO xxl_job_registry( registry_group , registry_key , registry_value, update_time)
 		VALUES( #{registryGroup}  , #{registryKey} , #{registryValue}, #{updateTime})
 		ON DUPLICATE KEY UPDATE
 			update_time = #{updateTime}
+	</insert>-->
+	<insert id="registrySaveOrUpdate" >
+		MERGE INTO xxl_job_registry tgt
+			USING (
+				SELECT
+					#{registryGroup} AS registry_group,
+					#{registryKey} AS registry_key,
+					#{registryValue} AS registry_value,
+					#{updateTime} AS update_time
+				FROM dual
+			) src
+			ON (tgt.registry_group = src.registry_group
+				AND tgt.registry_key = src.registry_key
+				AND tgt.registry_value = src.registry_value)
+			WHEN MATCHED THEN
+				UPDATE SET tgt.update_time = src.update_time
+			WHEN NOT MATCHED THEN
+				INSERT (registry_group, registry_key, registry_value, update_time)
+					VALUES (src.registry_group, src.registry_key, src.registry_value, src.update_time);
 	</insert>
-
 	<!--
     <update id="registryUpdate" >
         UPDATE xxl_job_registry
