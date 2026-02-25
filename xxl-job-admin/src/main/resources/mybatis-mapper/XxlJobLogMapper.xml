@@ -139,14 +139,14 @@
 	<update id="updateTriggerInfo" >
 		UPDATE xxl_job_log
 		SET
-			trigger_time #{triggerTime},
-			trigger_code= #{triggerCode},
-			trigger_msg= #{triggerMsg},
-			executor_address= #{executorAddress},
-			executor_handler=#{executorHandler},
-			executor_param= #{executorParam},
-			executor_sharding_param= #{executorShardingParam},
-			executor_fail_retry_count= #{executorFailRetryCount}
+			trigger_time = #{triggerTime},
+			trigger_code = #{triggerCode},
+			trigger_msg = #{triggerMsg},
+			executor_address = #{executorAddress},
+			executor_handler = #{executorHandler},
+			executor_param = #{executorParam},
+			executor_sharding_param = #{executorShardingParam},
+			executor_fail_retry_count = #{executorFailRetryCount}
 		WHERE id= #{id}
 	</update>
 
